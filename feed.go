@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"encoding/xml"
 	"log"
 )
@@ -38,8 +39,12 @@ type Entry struct {
 }
 
 func parseAtom(content []byte) (Atom1, error) {
+	// Contents from Ptt will sometimes contain the escape character (\x1b),
+	// which will leads xml.Unmarshal to fail, so here we strip them first.
+	safeContent := bytes.Replace(content, []byte("\x1b"), []byte(""), -1)
+
 	a := Atom1{}
-	err := xml.Unmarshal(content, &a)
+	err := xml.Unmarshal(safeContent, &a)
 	if err != nil {
 		log.Println(err)
 		return Atom1{}, err

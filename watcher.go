@@ -17,12 +17,14 @@ func watcher(sub Subscription) {
 
 		feed, err := fetchPttFeed(sub.FeedUrl)
 		if err != nil {
-			log.Fatal("Failed to fetch feed")
+			log.Println("Failed to fetch feed")
+			return
 		}
 
 		feedUpdated, err := parsePttTime(feed.Updated)
 		if err != nil {
-			log.Fatal("Failed to parse feed's update time")
+			log.Println("Failed to parse feed's update time")
+			return
 		}
 
 		if feedUpdated.Equal(lastUpdated) {
@@ -31,7 +33,7 @@ func watcher(sub Subscription) {
 		}
 
 		lastUpdated = feedUpdated
-		log.Println("Feed updated at:", feedUpdated.Local())
+		log.Printf("%s updated at %s", sub.Name, feedUpdated.Local())
 
 		var notification Notification
 		size := len(feed.EntryList)
@@ -40,7 +42,8 @@ func watcher(sub Subscription) {
 			// Try to parse the publish time of entry
 			published, err := parsePttTime(entry.Published)
 			if err != nil {
-				log.Fatal("Error while parsing entry")
+				log.Fatal("Error while parsing entry's publish time")
+				return
 			}
 
 			// This entry has been traversed

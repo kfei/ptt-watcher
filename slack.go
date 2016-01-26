@@ -17,13 +17,14 @@ func notifier() {
 	for {
 		select {
 		case notification := <-nChan:
-			channelID, timestamp, err := api.PostMessage(config.SlackChannel, notification.Body, params)
+			_, _, err := api.PostMessage(config.SlackChannel, notification.Body, params)
 			if err != nil {
-				log.Println("Error while sending Slack message", timestamp, err)
+				log.Println("Error while sending Slack message:\n", notification.Body)
+				log.Println("Detail:\n", err)
 				// TODO: Add a message queue for retry sending
 				continue
 			}
-			log.Println("Message successfully sent to", channelID)
+			log.Println("Message successfully sent")
 		}
 	}
 }

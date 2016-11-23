@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"time"
 )
@@ -35,7 +34,7 @@ func watcher(sub Subscription) {
 		lastUpdated = feedUpdated
 		log.Printf("%s updated at %s", sub.Name, feedUpdated.Local())
 
-		var notification NotificationMessage
+		var notification = NotificationMessage{Subscription: sub}
 		size := len(feed.EntryList)
 		for i := size - 1; i >= 0; i-- {
 			var entry = feed.EntryList[i]
@@ -56,16 +55,15 @@ func watcher(sub Subscription) {
 			// Filtering
 			if filteredAny(entry.Title, sub.Filters) {
 				// Add this entry to notification
-				notification.Body += fmt.Sprintf("><%s|%s>\n", entry.Link.Href, entry.Title)
-				log.Println("New interesting entry:", entry.Title)
+				item := NotificationMessageItem{entry.Link.Href, entry.Title}
+				notification.Items = append(notification.Items, item)
+				log.Println("New entry:", entry.Title)
 				continue
 			}
 		}
 
 		// Send notification if any interesting post was found
-		if len(notification.Body) > 0 {
-			banner := fmt.Sprintf("New interesting entries in *%s*\n", sub.Name)
-			notification.Body = banner + notification.Body
+		if len(notification.Items) > 0 {
 			if contains(sub.NotifyMethods, "slack") {
 				nSlackChan <- notification
 			}

@@ -33,5 +33,12 @@ type Subscription struct {
 }
 
 type NotificationMessage struct {
-	Body string
+	Subscription Subscription
+	Items        []NotificationMessageItem
+	Body         string
+}
+
+type NotificationMessageItem struct {
+	Href  string
+	Title string
 }

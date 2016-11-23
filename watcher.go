@@ -62,12 +62,15 @@ func watcher(sub Subscription) {
 			}
 		}
 
-		// Send Slack notification if any interesting post was found
+		// Send notification if any interesting post was found
 		if len(notification.Body) > 0 {
 			banner := fmt.Sprintf("New interesting entries in *%s*\n", sub.Name)
 			notification.Body = banner + notification.Body
 			if contains(sub.NotifyMethods, "slack") {
-				nChan <- notification
+				nSlackChan <- notification
+			}
+			if contains(sub.NotifyMethods, "line") {
+				nLineChan <- notification
 			}
 		}
 	}

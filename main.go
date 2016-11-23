@@ -8,7 +8,8 @@ import (
 )
 
 var config Config
-var nChan = make(chan NotificationMessage)
+var nSlackChan = make(chan NotificationMessage)
+var nLineChan = make(chan NotificationMessage)
 
 func main() {
 	configFile, err := os.Open("config.json")
@@ -23,6 +24,9 @@ func main() {
 
 	// Start Slack notifier
 	go slackNotifier()
+
+	// Start Line notifier
+	go lineNotifier()
 
 	// Start feed watchers
 	for _, sub := range config.Subscriptions {

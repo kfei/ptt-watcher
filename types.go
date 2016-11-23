@@ -9,12 +9,19 @@ type Filter string
 
 type Notifications struct {
 	Slack SlackConfig `json:"slack,omitempty"`
+	Line  LineConfig  `json:"line,omitempty"`
 }
 
 type SlackConfig struct {
 	Token    string `json:"token"`
 	Channel  string `json:"channel"`
 	UserName string `json:"userName"`
+}
+
+type LineConfig struct {
+	ChannelSecret      string `json:"channelSecret"`
+	ChannelAccessToken string `json:"channelAccessToken"`
+	ToUserId           string `json:"toUserId"`
 }
 
 type Subscription struct {

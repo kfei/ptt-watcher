@@ -4,6 +4,11 @@
       "token": "YOUR_SLACK_TOKEN",
       "channel": "#ptt",
       "userName": "ptt-watcher"
+    },
+    "line": {
+      "channelSecret": "YOUR_LINE_CHANNEL_SECRET",
+      "channelAccessToken": "YOUR_LINE_CHANNEL_ACCESS_TOKEN",
+      "toUserId": "USER_ID (you should get this from webhook service)"
     }
   },
   "subscriptions": [
@@ -21,7 +26,7 @@
       "name": "DC_SALE",
       "feedUrl": "http://rss.ptt.cc/DC_SALE.xml",
       "refreshTime": 60,
-      "notifyMethods": ["slack"],
+      "notifyMethods": ["slack", "line"],
       "filters": [
         "賣 5D2"
       ]
@@ -30,7 +35,7 @@
       "name": "Beauty",
       "feedUrl": "http://rss.ptt.cc/Beauty.xml",
       "refreshTime": 600,
-      "notifyMethods": ["slack"],
+      "notifyMethods": ["line"],
       "filters": [
         "正妹"
       ]

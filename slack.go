@@ -20,7 +20,7 @@ func slackNotifier() {
 
 	for {
 		select {
-		case message := <-nChan:
+		case message := <-nSlackChan:
 			_, _, err := api.PostMessage(channel, message.Body, params)
 			if err != nil {
 				log.Println("Error while sending Slack message:\n", message.Body)
@@ -28,7 +28,7 @@ func slackNotifier() {
 				// TODO: Add a message queue for retry sending
 				continue
 			}
-			log.Println("Message successfully sent")
+			log.Println("Message successfully sent to Slack")
 		}
 	}
 }

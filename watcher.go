@@ -35,7 +35,7 @@ func watcher(sub Subscription) {
 		lastUpdated = feedUpdated
 		log.Printf("%s updated at %s", sub.Name, feedUpdated.Local())
 
-		var notification Notification
+		var notification NotificationMessage
 		size := len(feed.EntryList)
 		for i := size - 1; i >= 0; i-- {
 			var entry = feed.EntryList[i]
@@ -66,7 +66,9 @@ func watcher(sub Subscription) {
 		if len(notification.Body) > 0 {
 			banner := fmt.Sprintf("New interesting entries in *%s*\n", sub.Name)
 			notification.Body = banner + notification.Body
-			nChan <- notification
+			if contains(sub.NotifyMethods, "slack") {
+				nChan <- notification
+			}
 		}
 	}
 

@@ -35,3 +35,19 @@ func TestFilter(t *testing.T) {
 	filters7 := []Filter{"not", "appear"}
 	assert.False(filteredAny(str, filters7))
 }
+
+func TestContains(t *testing.T) {
+	assert := assert.New(t)
+
+	str1 := []string{"slack", "line"}
+	assert.True(contains(str1, "slack"))
+	assert.True(contains(str1, "line"))
+	assert.False(contains(str1, "telegram"))
+
+	str2 := []string{"slack"}
+	assert.True(contains(str2, "slack"))
+	assert.False(contains(str2, "line"))
+
+	str3 := []string{}
+	assert.False(contains(str3, "slack"))
+}

@@ -65,3 +65,12 @@ func filteredAny(str string, filters []Filter) bool {
 
 	return false
 }
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}

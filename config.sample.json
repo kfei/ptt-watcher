@@ -1,12 +1,17 @@
 {
-  "slackToken": "YOUR_SLACK_TOKEN",
-  "slackChannel": "#ptt",
-  "slackUserName": "ptt-watcher",
+  "notifications": {
+    "slack": {
+      "token": "YOUR_SLACK_TOKEN",
+      "channel": "#ptt",
+      "userName": "ptt-watcher"
+    }
+  },
   "subscriptions": [
     {
       "name": "HardwareSale",
       "feedUrl": "http://rss.ptt.cc/HardwareSale.xml",
       "refreshTime": 60,
+      "notifyMethods": ["slack"],
       "filters": [
         "賣 DDR3L",
         "賣 i7"
@@ -16,6 +21,7 @@
       "name": "DC_SALE",
       "feedUrl": "http://rss.ptt.cc/DC_SALE.xml",
       "refreshTime": 60,
+      "notifyMethods": ["slack"],
       "filters": [
         "賣 5D2"
       ]
@@ -24,6 +30,7 @@
       "name": "Beauty",
       "feedUrl": "http://rss.ptt.cc/Beauty.xml",
       "refreshTime": 600,
+      "notifyMethods": ["slack"],
       "filters": [
         "正妹"
       ]

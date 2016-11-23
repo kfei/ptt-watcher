@@ -11,7 +11,7 @@ var config Config
 var nSlackChan = make(chan NotificationMessage)
 var nLineChan = make(chan NotificationMessage)
 
-func main() {
+func loadConfig() {
 	configFile, err := os.Open("config.json")
 	if err != nil {
 		log.Fatal("Error while opening config.json", err)
@@ -21,11 +21,14 @@ func main() {
 	if err = jsonParser.Decode(&config); err != nil {
 		log.Fatal("Error while parsing config.json", err)
 	}
+}
 
-	// Start Slack notifier
+func main() {
+	// Load configuration
+	loadConfig()
+
+	// Start notifiers
 	go slackNotifier()
-
-	// Start Line notifier
 	go lineNotifier()
 
 	// Start feed watchers

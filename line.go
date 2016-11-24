@@ -29,14 +29,15 @@ func lineNotifier() {
 		select {
 		case notification := <-nLineChan:
 			messageBody := lineMessageGenerator(notification)
+			subName := bold(notification.Subscription.Name)
 			_message := linebot.NewTextMessage(messageBody)
 			_, err := bot.PushMessage(toUserId, _message).Do()
 			if err != nil {
-				log.Fatal("Error while sending Line message\n", messageBody)
+				log.Fatalf("%s Error while sending Line message", subName, messageBody)
 				// TODO: Add a message queue for retry sending
 				continue
 			}
-			log.Println("Message successfully sent to Line")
+			log.Printf("%s Message successfully sent to Line", subName)
 		}
 	}
 }

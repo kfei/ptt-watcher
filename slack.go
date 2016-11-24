@@ -31,14 +31,14 @@ func slackNotifier() {
 		select {
 		case notification := <-nSlackChan:
 			messageBody := slackMessageGenerator(notification)
+			subName := bold(notification.Subscription.Name)
 			_, _, err := api.PostMessage(channel, messageBody, params)
 			if err != nil {
-				log.Println("Error while sending Slack message:\n", messageBody)
-				log.Println("Detail:\n", err)
+				log.Printf("%s Error while sending Slack message: %s\n%s", subName, messageBody, err)
 				// TODO: Add a message queue for retry sending
 				continue
 			}
-			log.Println("Message successfully sent to Slack")
+			log.Printf("%s Message successfully sent to Slack", subName)
 		}
 	}
 }

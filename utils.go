@@ -6,7 +6,11 @@ import (
 	"net/http/httputil"
 	"strings"
 	"time"
+
+	"github.com/fatih/color"
 )
+
+var bold = color.New(color.Bold).SprintFunc()
 
 func fetchPttFeed(url string) (Atom1, error) {
 	response, err := http.Get(url)

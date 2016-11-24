@@ -6,33 +6,34 @@ import (
 )
 
 func watcher(sub Subscription) {
-	log.Println("Start watcher for", sub.Name)
+	log.Printf("%s Watcher started", bold(sub.Name))
 
 	var lastUpdated = time.Time{}
 	var latestPublished = time.Time{}
 
 	refresh := func(t time.Time) {
-		log.Printf("Refreshing %s at %s\n", sub.Name, t)
+		log.Printf("%s Refreshing...", bold(sub.Name))
 
 		feed, err := fetchPttFeed(sub.FeedUrl)
 		if err != nil {
-			log.Println("Failed to fetch feed")
+			log.Printf("%s Failed to fetch feed", bold(sub.Name))
 			return
 		}
 
 		feedUpdated, err := parsePttTime(feed.Updated)
 		if err != nil {
-			log.Println("Failed to parse feed's update time")
+			log.Printf("%s Failed to parse feed's update time", bold(sub.Name))
 			return
 		}
 
 		if feedUpdated.Equal(lastUpdated) {
 			// The feed XML has not changed
+			log.Printf("%s No updates", bold(sub.Name))
 			return
 		}
 
 		lastUpdated = feedUpdated
-		log.Printf("%s updated at %s", sub.Name, feedUpdated.Local())
+		log.Printf("%s Updated at %s", bold(sub.Name), feedUpdated.Local())
 
 		var notification = NotificationMessage{Subscription: sub}
 		size := len(feed.EntryList)
@@ -41,7 +42,7 @@ func watcher(sub Subscription) {
 			// Try to parse the publish time of entry
 			published, err := parsePttTime(entry.Published)
 			if err != nil {
-				log.Fatal("Error while parsing entry's publish time")
+				log.Fatal("%s Error while parsing entry's publish time", bold(sub.Name))
 				return
 			}
 
@@ -57,7 +58,7 @@ func watcher(sub Subscription) {
 				// Add this entry to notification
 				item := NotificationMessageItem{entry.Link.Href, entry.Title}
 				notification.Items = append(notification.Items, item)
-				log.Println("New entry:", entry.Title)
+				log.Printf("%s Found new entry: %s", bold(sub.Name), entry.Title)
 				continue
 			}
 		}

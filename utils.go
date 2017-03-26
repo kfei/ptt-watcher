@@ -35,7 +35,7 @@ func fetchPttFeed(url string) (Atom1, error) {
 
 func parsePttTime(timeStr string) (time.Time, error) {
 	loc, _ := time.LoadLocation("Asia/Taipei")
-	var layout = "2006-01-02T15:04:05"
+	var layout = "2006-01-02T15:04:05-07:00"
 
 	t, err := time.ParseInLocation(layout, strings.TrimSuffix(timeStr, "Z"), loc)
 	if err != nil {
